@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تشفير النص</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.5s; /* تحديد زمن التحول */
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #fff; /* لون خلفية المربعات */
+      border: 2px solid #4caf50; /* لون الحدود الأولي */
+      padding: 20px;
+      border-radius: 10px;
+      transition: background-color 0.5s, border-color 0.5s; /* تحديد زمن التحول */
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    input, button, div {
+      font-size: 16px;
+      padding: 15px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 8px;
+      width: 400px;
+      transition: background-color 0.5s; /* تحديد زمن التحول */
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      cursor: pointer;
+      margin-top: -30px; /* تعديل المسافة العلوية للزر */
+      margin-right: 20px; /* تعديل المسافة اليمنى للزر */
+      padding: 10px 5px; /* تعديل حجم الزر */
+      border: none;
+      border-radius: 8px; /* الزر الآن مستطيل */
+      font-size: 14px; /* تصغير حجم النص */
+      transition: background-color 0.5s; /* تحديد زمن التحول */
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    p, div {
+      font-size: 18px;
+      margin-top: 20px;
+    }
+
+    /* الوضع الداكن */
+    body.dark-mode {
+      background-color: #262626; /* تغيير لون الخلفية في الوضع الداكن */
+      color: #ddd; /* تغيير لون النص في الوضع الداكن */
+    }
+
+    body.dark-mode .container {
+      background-color: #333; /* تغيير لون خلفية المربعات في الوضع الداكن */
+      border-color: #800080; /* تغيير لون الحدود في الوضع الداكن */
+    }
+
+    body.dark-mode input,
+    body.dark-mode button,
+    body.dark-mode div {
+      background-color: #555; /* تغيير لون خلفية العناصر في الوضع الداكن */
+    }
+
+    body.dark-mode button:hover {
+      background-color: #800080;
+    }
+  </style>
+</head>
+<body>
+
+  <button onclick="toggleDarkMode()">تبديل الوضع</button>
+
+  <div class="container">
+    <label for="inputText">ادخل الكلمة:</label>
+    <input type="text" id="inputText">
+    <button onclick="encryptAndCopy()">تشفير ونسخ</button>
+    <p id="result"></p>
+
+    <label for="decryptedText">النص المشفر:</label>
+    <div contenteditable="true" id="decryptedText"></div>
+    <button onclick="decryptText()">فك التشفير</button>
+
+    <label for="originalText">النص الأصلي:</label>
+    <div id="originalText"></div>
+  </div>
+
+  <script>
+    function encryptText() {
+      let inputText = document.getElementById('inputText').value;
+      let encryptedText = '';
+
+      for (let i = 0; i < inputText.length; i++) {
+        let currentChar = inputText[i];
+        let nextChar = String.fromCharCode(currentChar.charCodeAt(0) + 1);
+        encryptedText += nextChar;
+      }
+
+      document.getElementById('result').textContent = 'النص المشفر: ' + encryptedText;
+
+      return encryptedText;
+    }
+
+    function encryptAndCopy() {
+      let resultText = encryptText();
+
+      let textArea = document.createElement("textarea");
+      textArea.value = resultText;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+
+      alert('تم نسخ النص المشفر إلى الحافظة');
+    }
+
+    function decryptText() {
+      let encryptedText = document.getElementById('decryptedText').innerText;
+      let decryptedText = '';
+
+      for (let i = 0; i < encryptedText.length; i++) {
+        let currentChar = encryptedText[i];
+        let prevChar = String.fromCharCode(currentChar.charCodeAt(0) - 1);
+        decryptedText += prevChar;
+      }
+
+      document.getElementById('originalText').textContent = 'النص الأصلي: ' + decryptedText;
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+  </script>
+</body>
+</html>
